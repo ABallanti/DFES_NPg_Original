@@ -38,16 +38,19 @@ if(!OI.ready){
 OI.ready(function(){
 
 	dfes = new FES({
+		"files": {
+			"parameters": "data/scenarios/config.json"
+		},
 		"options": {
 			"scenario": "NPg Reference Scenario",
 			"view": "LAD",
-			"key": "2023",
+			"key": "2024",
 			"parameter": "ev",
 			"scale": "relative",
-			"years": {"min":2023, "max":2050},
+			"years": {"min":2024, "max":2051},
 			"map": {
 				"bounds": [[52.6497,-5.5151],[56.01680,2.35107]],
-				"attribution": "Vis: <a href=\"https://open-innovations.org/projects/\">Open Innovations</a>, Data: NPG/Element Energy"
+				"attribution": "Vis: <a href=\"https://open-innovations.org/projects/\">Open Innovations</a>, Data: ENWL/Element Energy"
 			}
 		},
 		"mapping": {
@@ -60,14 +63,14 @@ OI.ready(function(){
 		},
 		"layers": {
 			"LADlayer":{
-				"geojson": "data/maps/LAD2023-npg.geojson",
-				"key": "LAD23CD",
-				"name": "LAD23NM"
+				"geojson": "data/maps/enwl_dfes_local_authority_polygons.geojson",
+				"key": "local_authority",
+				"name": "local_authority"
 			},
 			"PRIMARYlayer":{
-				"geojson":"data/maps/npg-primaries-polygons-unique-2023_BGC.geojson",
-				"key": "PRIMARYNM",
-				"name": "PRIMARYNM"
+				"geojson":"data/maps/enwl-pry-voronoi.geojson",
+				"key": "pry_group",
+				"name": "pry_group"
 			}
 		},
 		"views":{
@@ -105,7 +108,7 @@ OI.ready(function(){
 							var name = attr.id;
 							if(this.layers.LADlayer){
 								for(var c = 0; c < this.layers.LADlayer.geojson.features.length; c++){
-									if(this.layers.LADlayer.geojson.features[c].properties[attr.key]==attr.id) name = this.layers.LADlayer.geojson.features[c].properties.LAD23NM;
+									if(this.layers.LADlayer.geojson.features[c].properties[attr.key]==attr.id) name = this.layers.LADlayer.geojson.features[c].properties.local_authority;
 								}
 							}
 							
@@ -221,7 +224,53 @@ OI.ready(function(){
 		},
 		"on": {
 			"processData": function(data,d,url){
-				if(url.match("https://northernpowergrid.opendatasoft.com/api/explore/v2.1/")){
+				console.log('processData called with URL:', url);
+				console.log('Current scenario:', this.options.scenario);
+				console.log('Current parameter:', this.options.parameter);
+				console.log('Data key:', data.key);
+				console.log('Data file:', data.file);
+				console.log('Full data object:', data);
+				
+				// Handle ENWL CSV files (local files with SPENWL in the name)
+				if(url.match(/SPENWL\.csv$/)){
+					console.log('Processing ENWL CSV file:', url);
+					var rows = d.replace(/[\n\r]+$/,'').split(/\r\n/);
+					var r,cols,c,head = {},header = [],orows = new Array(rows.length-1);
+					if(rows.length > 1){
+						for(r = 0; r < rows.length; r++){
+							cols = rows[r].split(/,/);
+							if(r==0){
+								header = [data.key];
+								for(c = 0; c < cols.length; c++){
+									head[cols[c]] = c;
+									if(cols[c]==parseInt(cols[c])) header.push(parseInt(cols[c]));
+								}
+								console.log('ENWL CSV header:', header);
+							}else{
+								orows[r-1] = new Array(header.length);
+								for(c = 0; c < header.length; c++){
+									id = header[c];
+									if(id==data.key){
+										v = cols[head[id]].toUpperCase(); // Convert to uppercase to match map data
+										console.log('ENWL CSV key conversion:', cols[head[id]], '->', v);
+									}else{
+										v = cols[head[id]];
+										if(parseFloat(v)==v) v = parseFloat(v);
+									}
+									orows[r-1][c] = v;
+								}
+							}
+						}
+						console.log('ENWL CSV processed rows:', orows.length);
+					}else{
+						this.message('No data loaded from ENWL CSV',{'id':'error','type':'ERROR'});
+					}
+					// We need to add a "raw" variable that consists of { header: [], rows: [] }
+					data.raw = {'rows':orows,'header':header};
+					data.col = 0;
+				}
+				// Handle Northern Powergrid API data
+				else if(url.match("https://northernpowergrid.opendatasoft.com/api/explore/v2.1/")){
 					var rows = d.replace(/[\n\r]+$/,'').split(/\r\n/);
 					var r,cols,c,head = {},header = [],orows = new Array(rows.length-1);
 					if(rows.length > 1){
