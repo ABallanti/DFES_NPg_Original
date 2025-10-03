@@ -43,7 +43,7 @@ OI.ready(function(){
 		},
 		"options": {
 			"scenario": "NPg Reference Scenario",
-			"view": "LAD",
+			"view": "primaries",
 			"key": "2024",
 			"parameter": "ev",
 			"scale": "relative",
@@ -59,6 +59,9 @@ OI.ready(function(){
 					"file": "data/primaries2lad.json"
 				},
 				"PRIMARYlayer": {}
+			},
+			"la": {
+				"LADlayer": {}  // No mapping needed - direct LA data
 			}
 		},
 		"layers": {

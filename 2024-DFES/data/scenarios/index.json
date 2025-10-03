@@ -7,6 +7,7 @@
 		"data": {
 			"evportal": { "dataBy": "primary", "file": "https://northernpowergrid.opendatasoft.com/api/explore/v2.1/catalog/datasets/northern-powergrid-dfes/exports/csv?refine=voltage_level%3A%22Primary%22&refine=scenario_name%3A%22NG%20FES%20-%20Falling%20Short%22&refine=output_parameter%3A%22Number%20of%20electric%20cars%20and%20vans%20(hybrid%20and%20full%20electric)%22","key": "substation_name" },
 			"ev": { "dataBy": "primary", "file": "primaries/EV-CF-SPENWL.csv", "key": "Primary" },
+			"ev-la": { "dataBy": "la", "file": "las/LA-EV-CF-SPENWL.csv", "key": "Local Authority List" },
 			"ebus": { "dataBy": "primary", "file": "primaries/Number of electric buses-CF.csv", "key": "Primary" },
 			"ehgv": { "dataBy": "primary", "file": "primaries/Number of electric HGVs-CF.csv", "key": "Primary" },
 			"peakdemand":{ "dataBy": "primary", "file": "primaries/PeakDemandWithToUT-CF.csv", "key": "Primary" },
@@ -31,6 +32,7 @@
 		"data": {
 			"evportal": { "dataBy": "primary", "file": "https://northernpowergrid.opendatasoft.com/api/explore/v2.1/catalog/datasets/northern-powergrid-dfes/exports/csv?refine=voltage_level%3A%22Primary%22&refine=scenario_name%3A%22NG%20FES%20-%20System%20Transformation%22&refine=output_parameter%3A%22Number%20of%20electric%20cars%20and%20vans%20(hybrid%20and%20full%20electric)%22","key": "substation_name" },
 			"ev": { "dataBy": "primary", "file": "primaries/EV-HE-SPENWL.csv", "key": "Primary" },
+			"ev-la": { "dataBy": "la", "file": "las/LA-EV-HE-SPENWL.csv", "key": "Local Authority List" },
 			"ebus": { "dataBy": "primary", "file": "primaries/Number of electric buses-HE.csv", "key": "Primary" },
 			"ehgv": { "dataBy": "primary", "file": "primaries/Number of electric HGVs-HE.csv", "key": "Primary" },
 			"peakdemand":{ "dataBy": "primary", "file": "primaries/PeakDemandWithToUT-HE.csv", "key": "Primary" },			
@@ -55,6 +57,7 @@
 		"data": {
 			"evportal": { "dataBy": "primary", "file": "https://northernpowergrid.opendatasoft.com/api/explore/v2.1/catalog/datasets/northern-powergrid-dfes/exports/csv?refine=voltage_level%3A%22Primary%22&refine=scenario_name%3A%22NG%20FES%20-%20Consumer%20Transformation%22&refine=output_parameter%3A%22Number%20of%20electric%20cars%20and%20vans%20(hybrid%20and%20full%20electric)%22","key": "substation_name" },
 			"ev": { "dataBy": "primary", "file": "primaries/EV-EE-SPENWL.csv", "key": "Primary" },
+			"ev-la": { "dataBy": "la", "file": "las/LA-EV-EE-SPENWL.csv", "key": "Local Authority List" },
 			"ebus": { "dataBy": "primary", "file": "primaries/Number of electric buses-EE.csv", "key": "Primary" },
 			"ehgv": { "dataBy": "primary", "file": "primaries/Number of electric HGVs-EE.csv", "key": "Primary" },
 			"peakdemand":{ "dataBy": "primary", "file": "primaries/PeakDemandWithToUT-EE.csv", "key": "Primary" },			
@@ -79,6 +82,7 @@
 		"data": {
 			"evportal": { "dataBy": "primary", "file": "https://northernpowergrid.opendatasoft.com/api/explore/v2.1/catalog/datasets/northern-powergrid-dfes/exports/csv?refine=voltage_level%3A%22Primary%22&refine=scenario_name%3A%22NG%20FES%20-%20Leading%20The%20Way%22&refine=output_parameter%3A%22Number%20of%20electric%20cars%20and%20vans%20(hybrid%20and%20full%20electric)%22","key": "substation_name" },
 			"ev": { "dataBy": "primary", "file": "primaries/EV-HT-SPENWL.csv", "key": "Primary" },
+			"ev-la": { "dataBy": "la", "file": "las/LA-EV-HT-SPENWL.csv", "key": "Local Authority List" },
 			"ebus": { "dataBy": "primary", "file": "primaries/Number of electric buses-HT.csv", "key": "Primary" },
 			"ehgv": { "dataBy": "primary", "file": "primaries/Number of electric HGVs-HT.csv", "key": "Primary" },
 			"peakdemand":{ "dataBy": "primary", "file": "primaries/PeakDemandWithToUT-HT.csv", "key": "Primary" },			
@@ -102,6 +106,7 @@
 		"data": {
 			"evportal": { "dataBy": "primary", "file": "https://northernpowergrid.opendatasoft.com/api/explore/v2.1/catalog/datasets/northern-powergrid-dfes/exports/csv?refine=voltage_level%3A%22Primary%22&refine=scenario_name%3A%22NPg%20Best%20View%22&refine=output_parameter%3A%22Number%20of%20electric%20cars%20and%20vans%20(hybrid%20and%20full%20electric)%22","key": "substation_name" },
 			"ev": { "dataBy": "primary", "file": "primaries/EV-BV-SPENWL.csv", "key": "Primary" },
+			"ev-la": { "dataBy": "la", "file": "las/LA-EV-BV-SPENWL.csv", "key": "Local Authority List" },
 			"ebus": { "dataBy": "primary", "file": "primaries/Number of electric buses-RS.csv", "key": "Primary" },
 			"ehgv": { "dataBy": "primary", "file": "primaries/Number of electric HGVs-RS.csv", "key": "Primary" },
 			"peakdemand":{ "dataBy": "primary", "file": "primaries/PeakDemandWithToUT-RS.csv", "key": "Primary" },			
