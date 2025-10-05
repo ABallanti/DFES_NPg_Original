@@ -79,7 +79,7 @@ OI.ready(function(){
 		"views":{
 			"LAD":{
 				"title":"Local Authorities",
-				"source": "primary",
+				"source": "la",
 				"layers":[{
 					"id": "LADlayer",
 					"heatmap": true,
@@ -88,97 +88,30 @@ OI.ready(function(){
 				"popup": {
 					"text": function(attr){
 						var popup,title,dp,value;
-						popup = '<h3>%TITLE%</h3><p>%VALUE%</p><div id="barchart" class="barchart"></div><p style="font-size:0.8em;margin-top: 0.25em;margin-bottom:0;text-align:center;">Primary substations (ordered)</p><p style="font-size:0.8em;margin-top:0.5em;">Columns show totals for each Primary substation associated with %TITLE%. The coloured portions show the fraction considered to be in %TITLE%. Hover over each to see details.</p>';
+						popup = '<h3>%TITLE%</h3><p>%VALUE%</p>';
 						title = (attr.properties[attr.name]||'?');
 						dp = (typeof attr.parameter.dp==="number" ? attr.parameter.dp : 2);
 						if(typeof attr.value!=="number") this.log('WARNING','No numeric value for '+attr.id)
-						value = '<strong>'+attr.parameter.title+' '+this.options.key+':</strong> '+(typeof attr.value==="number" ? (dp==0 ? Math.round(attr.value) : attr.value.toFixed(dp)).toLocaleString()+''+(attr.parameter.units ? '&thinsp;'+attr.parameter.units : '') : '');
-						return popup.replace(/\%VALUE\%/g,value).replace(/\%TITLE\%/g,title); // Replace values
-					},
-					"open": function(attr){
-						if(!attr) attr = {};
-
-						l = this.views[this.options.view].layers[0].id;
-						key = this.layers[l].key;
-
-						if(attr.id && key){
-
-							var data = [];
-							var balloons = [];
-							var raw = this.data.scenarios[this.options.scenario].data[this.options.parameter].raw;
-
-							// Work out the Local Authority name
-							var name = attr.id;
-							if(this.layers.LADlayer){
-								for(var c = 0; c < this.layers.LADlayer.geojson.features.length; c++){
-									if(this.layers.LADlayer.geojson.features[c].properties[attr.key]==attr.id) name = this.layers.LADlayer.geojson.features[c].properties.local_authority;
-								}
-							}
-							
-							// Find the column for the year
-							var yy = -1;
-							for(var i = 0; i < raw.header.length; i++){
-								if(raw.header[i]+''==this.options.key) yy = i;
-							}
-							if(yy < 0) return;
-
-							for(var p in this.mapping.primary.LADlayer.data){
-								if(this.mapping.primary.LADlayer.data[p][attr.id]){
-									v = 0;
-									for(var i = 0; i < raw.rows.length; i++){
-										if(raw.rows[i][0]==p) v = raw.rows[i][yy];
-									}
-
-									fracLA = this.mapping.primary.LADlayer.data[p][attr.id]*v;
-									fracOther = v - fracLA;
-									data.push([p,[v,p+'<br />Total: %VALUE%<br />'+(this.mapping.primary.LADlayer.data[p][attr.id]*100).toFixed(2).replace(/\.?0+$/,"")+'% is in '+name,fracLA,fracOther]]);
-								}
-							}
-
-							data.sort(function(a, b) {
-								if(a[1][0]===b[1][0]) return 0;
-								else return (a[1][0] < b[1][0]) ? -1 : 1;
-							}).reverse();
-
-							// Remove totals from bars now that we've sorted by total
-							for(var i = 0; i < data.length; i++){
-								balloons.push(data[i][1].splice(0,2));
-							}
-							
-							// Create the barchart object. We'll add a function to
-							// customise the class of the bar depending on the key.
-							var chart = new OI.barchart(attr.el.querySelector('.barchart'),{
-								'formatKey': function(key){
-									return '';
-								},
-								'formatBar': function(key,val,series){
-									var cls = (typeof series==="number" ? "series-"+series : "");
-									for(var i = 0; i < this.data.length; i++){
-										if(this.data[i][0]==key){
-											if(i > this.data.length/2) cls += " bar-right";
-										}
-									}
-									return cls;
-								}
-							});
-
-							// Send the data array and bin size then draw the chart
-							chart.setData(data).setBins({ 'mintick': 5 }).draw();
-							parameter = this.parameters[this.options.parameter].title+' '+this.options.key;
-							units = this.parameters[this.options.parameter].units;
-							dp = this.parameters[this.options.parameter].dp;
-
-							// Add an event
-							chart.on('barover',function(e){
-								document.querySelectorAll('.balloon').forEach((el)=>{ el.remove(); });
-								var b = balloons[e.bin];
-								appendHTML(e.event.currentTarget.querySelector('.bar.series-1'),"<div class=\"balloon\">"+b[1].replace(/%VALUE%/,parseFloat((b[0]).toFixed(dp)).toLocaleString()+(units ? '&thinsp;'+units:''))+"</div>");
-							});
-							document.querySelectorAll('.barchart table .bar').forEach((el)=>{ el.style['background-color'] = '#cccccc'; });
-							document.querySelectorAll('.barchart table .bar.series-0').forEach((el)=>{ el.style['background-color'] = this.data.scenarios[this.options.scenario].color; });
-						}else{
-							document.getElementById('barchart').remove();
+						// Get parameter title from the loaded parameters
+						var paramTitle = 'Data';
+						console.log('Parameter title debug - this.parameters:', this.parameters);
+						console.log('Parameter title debug - this.options.parameter:', this.options.parameter);
+						
+						// Map LA parameter back to base parameter
+						var baseParameter = this.options.parameter;
+						if(baseParameter.endsWith('-la')) {
+							baseParameter = baseParameter.replace('-la', '');
 						}
+						console.log('Mapped base parameter:', baseParameter);
+						
+						if(this.parameters && this.parameters[baseParameter]) {
+							paramTitle = this.parameters[baseParameter].title;
+							console.log('Found parameter title:', paramTitle);
+						} else {
+							console.log('Parameter not found, using default:', paramTitle);
+						}
+						value = '<strong>'+paramTitle+' '+this.options.key+':</strong> '+(typeof attr.value==="number" ? (dp==0 ? Math.round(attr.value) : attr.value.toFixed(dp)).toLocaleString()+''+(attr.parameter && attr.parameter.units ? '&thinsp;'+attr.parameter.units : '') : '?');
+						return popup.replace(/\%VALUE\%/g,value).replace(/\%TITLE\%/g,title); // Replace values
 					}
 				}
 			},
@@ -196,7 +129,12 @@ OI.ready(function(){
 						title = (attr.properties[attr.name]||'?');
 						dp = (typeof attr.parameter.dp==="number" ? attr.parameter.dp : 2);
 						if(typeof attr.value!=="number") this.log('WARNING','No numeric value for '+attr.id)
-						value = '<strong>'+attr.parameter.title+' '+this.options.key+':</strong> '+(typeof attr.value==="number" ? (dp==0 ? Math.round(attr.value) : attr.value.toFixed(dp)).toLocaleString()+''+(attr.parameter.units ? '&thinsp;'+attr.parameter.units : '') : '?');
+						// Get parameter title from the loaded parameters
+						var paramTitle = 'Data';
+						if(this.parameters && this.parameters[this.options.parameter]) {
+							paramTitle = this.parameters[this.options.parameter].title;
+						}
+						value = '<strong>'+paramTitle+' '+this.options.key+':</strong> '+(typeof attr.value==="number" ? (dp==0 ? Math.round(attr.value) : attr.value.toFixed(dp)).toLocaleString()+''+(attr.parameter && attr.parameter.units ? '&thinsp;'+attr.parameter.units : '') : '?');
 						return popup.replace(/\%VALUE\%/g,value).replace(/\%TITLE\%/g,title); // Replace values
 					}
 				}
@@ -219,7 +157,12 @@ OI.ready(function(){
 						title = (attr.properties[attr.name]||'?');
 						dp = (typeof attr.parameter.dp==="number" ? attr.parameter.dp : 2);
 						if(typeof attr.value!=="number") this.log('WARNING','No numeric value for '+attr.id)
-						value = '<strong>'+attr.parameter.title+' '+this.options.key+':</strong> '+(typeof attr.value==="number" ? (dp==0 ? Math.round(attr.value) : attr.value.toFixed(dp)).toLocaleString()+''+(attr.parameter.units ? '&thinsp;'+attr.parameter.units : '') : '?');
+						// Get parameter title from the loaded parameters
+						var paramTitle = 'Data';
+						if(this.parameters && this.parameters[this.options.parameter]) {
+							paramTitle = this.parameters[this.options.parameter].title;
+						}
+						value = '<strong>'+paramTitle+' '+this.options.key+':</strong> '+(typeof attr.value==="number" ? (dp==0 ? Math.round(attr.value) : attr.value.toFixed(dp)).toLocaleString()+''+(attr.parameter && attr.parameter.units ? '&thinsp;'+attr.parameter.units : '') : '?');
 						return popup.replace(/\%VALUE\%/g,value).replace(/\%TITLE\%/g,title); // Replace values
 					}
 				}

@@ -730,6 +730,11 @@
 			mapid = mapel.getAttribute('id');
 			this.map = L.map(mapid,{'scrollWheelZoom':true}).fitBounds(bounds);
 			this.map.on('popupopen',function(e){
+				console.log('=== LEAFLET POPUP OPEN EVENT ===');
+				console.log('Current view:', _obj.options.view);
+				console.log('View popup config:', _obj.views[_obj.options.view].popup);
+				console.log('Popup open function exists:', !!_obj.views[_obj.options.view].popup.open);
+				
 				// Call any attached functions
 				if(_obj.views[_obj.options.view].popup && _obj.views[_obj.options.view].popup.open){
 					var l,i;
@@ -737,7 +742,16 @@
 					for(i = 0; i < _obj.views[_obj.options.view].layers.length; i++){
 						if(_obj.views[_obj.options.view].layers[i].heatmap) l = i;
 					}
-					if(l>=0) _obj.views[_obj.options.view].popup.open.call(_obj,{'el':e.popup._contentNode,'id':e.popup._source.feature.properties[_obj.layers[_obj.views[_obj.options.view].layers[l].id].key]});
+					console.log('Heatmap layer index:', l);
+					if(l>=0) {
+						var featureProps = e.popup._source.feature.properties;
+						var layerKey = _obj.layers[_obj.views[_obj.options.view].layers[l].id].key;
+						var laId = featureProps[layerKey];
+						console.log('Feature properties:', featureProps);
+						console.log('Layer key:', layerKey);
+						console.log('LA ID:', laId);
+						_obj.views[_obj.options.view].popup.open.call(_obj,{'el':e.popup._contentNode,'id':laId});
+					}
 				}
 			});
 			this.map.attributionControl._attributions = {};
@@ -1019,19 +1033,37 @@
 		popup = '';
 		me = attr['this'];
 		
+		console.log('=== POPUPTEXT FUNCTION CALLED ===');
+		console.log('Feature properties:', feature.properties);
+		console.log('Current view:', me.options.view);
+		console.log('Current scenario:', me.options.scenario);
+		console.log('Current parameter:', me.options.parameter);
+		
 		lid = me.views[me.options.view].layers[attr.layer].id;
+		console.log('Layer ID:', lid);
+		console.log('Layer key:', me.layers[lid].key);
+		
 		if(!me.layers[lid].key || !feature.properties[me.layers[lid].key]){
 			me.log('ERROR','No property '+me.layers[lid].key+' in ',feature.properties);
 			return "";
 		}
 		key = feature.properties[me.layers[lid].key];
+		console.log('Feature key value:', key);
 		v = null;
 		view = me.options.view;
+		
+		console.log('Looking for data in:', me.data.scenarios[me.options.scenario].data[me.options.parameter]);
+		console.log('Data layers:', me.data.scenarios[me.options.scenario].data[me.options.parameter].layers);
+		console.log('View data:', me.data.scenarios[me.options.scenario].data[me.options.parameter].layers[view]);
+		
 		if(me.data.scenarios[me.options.scenario].data[me.options.parameter].layers[view].values && me.data.scenarios[me.options.scenario].data[me.options.parameter].layers[view].values[key]){
 			v = me.data.scenarios[me.options.scenario].data[me.options.parameter].layers[view].values[key][me.options.key];
+			console.log('Found value:', v);
+		} else {
+			console.log('No data found for key:', key);
 		}
 		if(typeof v!=="number"){
-			//console.warn('No value for '+key+' '+me.options.scenario+' '+me.options.parameter);
+			console.warn('No numeric value for '+key+' '+me.options.scenario+' '+me.options.parameter);
 		}
 		if(me.views[me.options.view].popup && typeof v!=="undefined"){
 			if(typeof me.views[me.options.view].popup.text==="string"){
