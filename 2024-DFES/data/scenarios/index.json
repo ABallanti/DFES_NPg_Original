@@ -101,7 +101,7 @@
 	},
 	"NPg Reference Scenario": {
 		"description": "<ul><li>Net zero compliant to 2050 target</li><li>Accelerated uptake of electric vehicles</li><li>Early adoption of heat pumps</li></ul>",
-		"color": "#ab1236",
+		"color": "#00a443",
 		"css": "reference-scenario",
 		"data": {
 			"evportal": { "dataBy": "primary", "file": "https://northernpowergrid.opendatasoft.com/api/explore/v2.1/catalog/datasets/northern-powergrid-dfes/exports/csv?refine=voltage_level%3A%22Primary%22&refine=scenario_name%3A%22NPg%20Best%20View%22&refine=output_parameter%3A%22Number%20of%20electric%20cars%20and%20vans%20(hybrid%20and%20full%20electric)%22","key": "substation_name" },

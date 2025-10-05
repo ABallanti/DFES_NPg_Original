@@ -28,13 +28,13 @@
 .electric-engagement-text { color: #F26522!important; }
 .holistic-transition { background-color: #C2CD23!important; color: #454546!important; }
 .holistic-transition-text { color: #454546!important; }
-.reference-scenario { background-color: #ab1236!important; color: white!important; }
-.reference-scenario-text { color: #ab1236!important; }
+.reference-scenario { background-color: #00a443!important; color: white!important; }
+.reference-scenario-text { color: #00a443!important; }
 
 
 .message { text-align: center; }
 .warning { color: rgb(95, 82, 7); background-color: rgb(251, 245, 208); filter: drop-shadow(0px 0px 1px rgb(95, 82, 7)); }
-.error { color: #721c24; background-color: #f8d7da; filter: drop-shadow(0 0 1px #f5c6cb)); }
+.error { color: #721c24; background-color: #f8d7da; filter: drop-shadow(0 0 1px #f5c6cb); }
 
 .holder > *:last-child { margin-bottom: 0; }
 
