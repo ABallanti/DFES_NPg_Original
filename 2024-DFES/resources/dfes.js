@@ -350,35 +350,44 @@
 		if(this.views[v]){
 			console.log(v);
 			this.options.view = v;
-			// Auto-switch EV parameter based on view
-			if (this.options.parameter === "ev" || this.options.parameter === "ev-la") {
-				// Store the old parameter before switching
-				var oldParameter = this.options.parameter;
-				
-				if (v === "LAD") {
-					// For Local Authorities view, use LA data
-					this.options.parameter = "ev-la";
-				} else {
-					// For other views, use primary data
-					this.options.parameter = "ev";
-				}
-				
-				// Clear layers data for the old parameter only
-				if (this.data.scenarios[this.options.scenario].data[oldParameter].layers) {
-					delete this.data.scenarios[this.options.scenario].data[oldParameter].layers[v];
-				}
-				
-				// Clear the raw data for the new parameter to force a fresh load
-				if (this.data.scenarios[this.options.scenario].data[this.options.parameter].raw) {
-					delete this.data.scenarios[this.options.scenario].data[this.options.parameter].raw;
-				}
+			// Auto-switch parameters based on view
+			var parameterPairs = [
+				{ primary: "ev", la: "ev-la" },
+				{ primary: "total-pv", la: "total-pv-la" },
+				{ primary: "total-consumption", la: "total-consumption-la" }
+			];
+			
+			for (var i = 0; i < parameterPairs.length; i++) {
+				var pair = parameterPairs[i];
+				if (this.options.parameter === pair.primary || this.options.parameter === pair.la) {
+					// Store the old parameter before switching
+					var oldParameter = this.options.parameter;
+					
+					if (v === "LAD") {
+						// For Local Authorities view, use LA data
+						this.options.parameter = pair.la;
+					} else {
+						// For other views, use primary data
+						this.options.parameter = pair.primary;
+					}
+					
+					// Clear layers data for the old parameter only
+					if (this.data.scenarios[this.options.scenario].data[oldParameter].layers) {
+						delete this.data.scenarios[this.options.scenario].data[oldParameter].layers[v];
+					}
+					
+					// Clear the raw data for the new parameter to force a fresh load
+					if (this.data.scenarios[this.options.scenario].data[this.options.parameter].raw) {
+						delete this.data.scenarios[this.options.scenario].data[this.options.parameter].raw;
+					}
 
-				// Force refresh: always load data and refresh map for view changes
-				this.loadData(function(){
-					this.mapData();
-					this.updateSlider();
-				});
-				return this;
+					// Force refresh: always load data and refresh map for view changes
+					this.loadData(function(){
+						this.mapData();
+						this.updateSlider();
+					});
+					return this;
+				}
 			}
 			
 			this.mapData();

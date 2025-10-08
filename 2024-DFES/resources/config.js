@@ -42,7 +42,7 @@ OI.ready(function(){
 			"parameters": "data/scenarios/config.json"
 		},
 		"options": {
-			"scenario": "NPg Reference Scenario",
+			"scenario": "Best View",
 			"view": "primaries",
 			"key": "2024",
 			"parameter": "ev",
