@@ -354,7 +354,9 @@
 			var parameterPairs = [
 				{ primary: "ev", la: "ev-la" },
 				{ primary: "total-pv", la: "total-pv-la" },
-				{ primary: "total-consumption", la: "total-consumption-la" }
+				{ primary: "total-consumption", la: "total-consumption-la" },
+				{ primary: "heatpumps-No-dom", la: "heatpumps-No-dom-la" },
+				{ primary: "heatpumps-No-nondom", la: "heatpumps-No-nondom-la" }
 			];
 			
 			for (var i = 0; i < parameterPairs.length; i++) {

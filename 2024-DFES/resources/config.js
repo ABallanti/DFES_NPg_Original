@@ -112,6 +112,11 @@ OI.ready(function(){
 						}
 						value = '<strong>'+paramTitle+' '+this.options.key+':</strong> '+(typeof attr.value==="number" ? (dp==0 ? Math.round(attr.value) : attr.value.toFixed(dp)).toLocaleString()+''+(attr.parameter && attr.parameter.units ? '&thinsp;'+attr.parameter.units : '') : '?');
 						return popup.replace(/\%VALUE\%/g,value).replace(/\%TITLE\%/g,title); // Replace values
+					},
+					"open": function(params){
+						// Called when popup opens - can be used for additional functionality
+						console.log('LAD popup opened for ID:', params.id);
+						// Add any additional popup functionality here if needed
 					}
 				}
 			},
@@ -136,6 +141,11 @@ OI.ready(function(){
 						}
 						value = '<strong>'+paramTitle+' '+this.options.key+':</strong> '+(typeof attr.value==="number" ? (dp==0 ? Math.round(attr.value) : attr.value.toFixed(dp)).toLocaleString()+''+(attr.parameter && attr.parameter.units ? '&thinsp;'+attr.parameter.units : '') : '?');
 						return popup.replace(/\%VALUE\%/g,value).replace(/\%TITLE\%/g,title); // Replace values
+					},
+					"open": function(params){
+						// Called when popup opens - can be used for additional functionality
+						console.log('Primaries popup opened for ID:', params.id);
+						// Add any additional popup functionality here if needed
 					}
 				}
 			},
@@ -164,6 +174,11 @@ OI.ready(function(){
 						}
 						value = '<strong>'+paramTitle+' '+this.options.key+':</strong> '+(typeof attr.value==="number" ? (dp==0 ? Math.round(attr.value) : attr.value.toFixed(dp)).toLocaleString()+''+(attr.parameter && attr.parameter.units ? '&thinsp;'+attr.parameter.units : '') : '?');
 						return popup.replace(/\%VALUE\%/g,value).replace(/\%TITLE\%/g,title); // Replace values
+					},
+					"open": function(params){
+						// Called when popup opens - can be used for additional functionality
+						console.log('PrimariesLAD popup opened for ID:', params.id);
+						// Add any additional popup functionality here if needed
 					}
 				}
 			}
