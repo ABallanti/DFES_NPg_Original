@@ -195,7 +195,8 @@ OI.ready(function(){
 				// Handle ENWL CSV files (local files with SPENWL in the name)
 				if(url.match(/SPENWL\.csv$/)){
 					console.log('Processing ENWL CSV file:', url);
-					var rows = d.replace(/[\n\r]+$/,'').split(/\r\n/);
+					// Handle different line endings (Windows \r\n, Unix \n, Mac \r)
+					var rows = d.replace(/[\n\r]+$/,'').split(/\r\n|\r|\n/);
 					var r,cols,c,head = {},header = [],orows = new Array(rows.length-1);
 					if(rows.length > 1){
 						for(r = 0; r < rows.length; r++){
@@ -232,7 +233,8 @@ OI.ready(function(){
 				}
 				// Handle Northern Powergrid API data
 				else if(url.match("https://northernpowergrid.opendatasoft.com/api/explore/v2.1/")){
-					var rows = d.replace(/[\n\r]+$/,'').split(/\r\n/);
+					// Handle different line endings (Windows \r\n, Unix \n, Mac \r)
+					var rows = d.replace(/[\n\r]+$/,'').split(/\r\n|\r|\n/);
 					var r,cols,c,head = {},header = [],orows = new Array(rows.length-1);
 					if(rows.length > 1){
 						for(r = 0; r < rows.length; r++){
