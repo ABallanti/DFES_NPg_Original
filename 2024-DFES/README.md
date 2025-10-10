@@ -1,6 +1,5 @@
-# Northern Powergrid Future Energy Scenarios 2024
-
-**This directory contains a prototype tool and none of the data should be taken as real or representative of the scenarios listed.**
+# This is a training exercise on a personal project on how develop web interface and energy dashboard
+# All the data reported in this repo is already publicly available and out of date
 
 ## About this visualisation
 
@@ -11,7 +10,7 @@ Four of the scenarios presented are aligned with Nationalgrid|ESO's [Future Ener
 * Hydrogen Evolution
 * Electric Engagement
 * Holistic Transition
-* NPg Reference Scenario
+* Best View
 
 ### Geographies
 
